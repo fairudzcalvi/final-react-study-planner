@@ -1,171 +1,97 @@
-import { Colors } from '@/constants/Colors';
-import { ScheduleSlot } from '@/hooks/useSchedule';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { DaySchedule } from '@/types';
 
 interface ScheduleCardProps {
-  slot: ScheduleSlot;
-  onPress: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
+  daySchedule: DaySchedule;
 }
 
-export default function ScheduleCard({ slot, onPress, onEdit, onDelete }: ScheduleCardProps) {
-  const getTypeStyle = (type: string) => {
-    switch (type) {
-      case 'Lecture':
-        return { bg: Colors.taskTypes.homework.bg, text: Colors.taskTypes.homework.text };
-      case 'Lab':
-        return { bg: Colors.taskTypes.project.bg, text: Colors.taskTypes.project.text };
-      case 'Exam':
-        return { bg: Colors.taskTypes.exam.bg, text: Colors.taskTypes.exam.text };
-      case 'Tutorial':
-        return { bg: '#f3e8ff', text: '#8b5cf6' };
-      default:
-        return { bg: Colors.background.secondary, text: Colors.text.primary };
-    }
-  };
-
-  const typeStyle = getTypeStyle(slot.type);
-
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete Class',
-      `Are you sure you want to delete "${slot.subject}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: onDelete },
-      ]
-    );
-  };
-
+export default function ScheduleCard({ daySchedule }: ScheduleCardProps) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.card} activeOpacity={0.7}>
-      <View style={styles.content}>
-        <View style={styles.info}>
-          <View style={styles.header}>
-            <Text style={styles.subject}>{slot.subject}</Text>
-            <View style={[styles.typeBadge, { backgroundColor: typeStyle.bg }]}>
-              <Text style={[styles.typeText, { color: typeStyle.text }]}>
-                {slot.type}
-              </Text>
-            </View>
-          </View>
-          
-          <View style={styles.details}>
-            <View style={styles.detailItem}>
-              <Ionicons name="business-outline" size={14} color={Colors.text.tertiary} />
-              <Text style={styles.detailText}>{slot.room}</Text>
-            </View>
-            
-            {slot.instructor && (
-              <View style={styles.detailItem}>
-                <Ionicons name="person-outline" size={14} color={Colors.text.tertiary} />
-                <Text style={styles.detailText}>{slot.instructor}</Text>
-              </View>
-            )}
-          </View>
-        </View>
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <MaterialIcons name="event" size={22} color="#5C6BC0" />
+        <Text style={styles.dayTitle}>{daySchedule.day}</Text>
+        <Text style={styles.slotCount}>{daySchedule.slots.length} classes</Text>
+      </View>
 
-        <View style={styles.actions}>
-          <View style={styles.timeBadge}>
+      {daySchedule.slots.map((slot, index) => (
+        <View key={index} style={styles.slot}>
+          <View style={styles.slotLeft}>
             <Text style={styles.timeText}>{slot.time}</Text>
           </View>
-          
-          <View style={styles.actionButtons}>
-            <TouchableOpacity onPress={onEdit} style={styles.actionButton}>
-              <Ionicons name="create-outline" size={18} color={Colors.primary} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleDelete} style={styles.actionButton}>
-              <Ionicons name="trash-outline" size={18} color={Colors.danger} />
-            </TouchableOpacity>
+          <View style={styles.slotRight}>
+            <Text style={styles.subjectText}>{slot.subject}</Text>
+            <Text style={styles.roomText}>{slot.room}</Text>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      ))}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.background.primary,
+    backgroundColor: '#FFF',
+    marginHorizontal: 16,
+    marginBottom: 12,
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowRadius: 3,
     elevation: 2,
-  },
-  content: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  info: {
-    flex: 1,
-    marginRight: 12,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  subject: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.text.primary,
-    flex: 1,
-    marginRight: 8,
-  },
-  typeBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  typeText: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  details: {
-    gap: 6,
-  },
-  detailItem: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    marginBottom: 12,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
   },
-  detailText: {
+  dayTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 8,
+    flex: 1,
+  },
+  slotCount: {
     fontSize: 13,
-    color: Colors.text.tertiary,
+    color: '#999',
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
-  actions: {
-    alignItems: 'flex-end',
-    gap: 8,
+  slot: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F5F5F5',
   },
-  timeBadge: {
-    backgroundColor: Colors.infoLight,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 6,
+  slotLeft: {
+    width: 90,
   },
   timeText: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
-    color: Colors.primary,
+    color: '#5C6BC0',
   },
-  actionButtons: {
-    flexDirection: 'row',
-    gap: 4,
+  slotRight: {
+    flex: 1,
   },
-  actionButton: {
-    padding: 6,
-    borderRadius: 6,
-    backgroundColor: Colors.background.secondary,
+  subjectText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 2,
+  },
+  roomText: {
+    fontSize: 13,
+    color: '#999',
   },
 });

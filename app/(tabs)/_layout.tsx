@@ -1,34 +1,33 @@
-import { Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.text.tertiary,
-        headerShown: false,
+        tabBarActiveTintColor: '#5C6BC0',
+        tabBarInactiveTintColor: '#999',
         tabBarStyle: {
-          backgroundColor: Colors.background.primary,
-          borderTopColor: Colors.border,
           borderTopWidth: 1,
+          borderTopColor: '#E0E0E0',
           paddingBottom: 8,
           paddingTop: 8,
-          height: 65,
+          height: 60,
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-        },
+        headerShown: true,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Tasks',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" size={size} color={color} />
+          headerTitle: 'Study Tasks',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'clipboard' : 'clipboard-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -36,8 +35,13 @@ export default function TabLayout() {
         name="schedule"
         options={{
           title: 'Schedule',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
+          headerTitle: 'Weekly Schedule',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'calendar' : 'calendar-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -45,8 +49,13 @@ export default function TabLayout() {
         name="about"
         options={{
           title: 'About',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="information-circle" size={size} color={color} />
+          headerTitle: 'About',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'information-circle' : 'information-circle-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />

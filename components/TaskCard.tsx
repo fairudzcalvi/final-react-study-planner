@@ -1,105 +1,83 @@
-import { Colors } from '@/constants/Colors';
-import { Task } from '@/hooks/useTasks';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Task } from '@/types';
+import { TYPE_COLORS } from '@/constants/data';
 
 interface TaskCardProps {
   task: Task;
   onPress: () => void;
-  onToggle: () => void;
-  onDelete: () => void;
+  onToggleComplete: () => void;
 }
 
-export default function TaskCard({ task, onPress, onToggle, onDelete }: TaskCardProps) {
-  const typeStyle = Colors.taskTypes[task.type.toLowerCase() as keyof typeof Colors.taskTypes];
-
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete Task',
-      `Are you sure you want to delete "${task.title}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: onDelete },
-      ]
-    );
-  };
-
+export default function TaskCard({ task, onPress, onToggleComplete }: TaskCardProps) {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.card, task.completed && styles.cardCompleted]}
-      activeOpacity={0.7}
-    >
-      <View style={styles.content}>
-        {/* Checkbox */}
-        <TouchableOpacity onPress={onToggle} style={styles.checkbox}>
-          <Ionicons
-            name={task.completed ? 'checkmark-circle' : 'ellipse-outline'}
-            size={28}
-            color={task.completed ? Colors.success : Colors.border}
-          />
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+      <View style={styles.left}>
+        <TouchableOpacity
+          style={[styles.checkbox, task.completed && styles.checkboxChecked]}
+          onPress={(e) => {
+            e.stopPropagation();
+            onToggleComplete();
+          }}
+        >
+          {task.completed && <Ionicons name="checkmark" size={18} color="#FFF" />}
         </TouchableOpacity>
 
-        {/* Task Info */}
         <View style={styles.info}>
-          <Text
-            style={[styles.title, task.completed && styles.titleCompleted]}
-            numberOfLines={2}
-          >
+          <Text style={[styles.title, task.completed && styles.titleCompleted]}>
             {task.title}
           </Text>
-
-          <View style={styles.tags}>
-            <View style={[styles.tag, { backgroundColor: typeStyle.bg }]}>
-              <Text style={[styles.tagText, { color: typeStyle.text }]}>
-                {task.type}
-              </Text>
+          <View style={styles.meta}>
+            <View style={[styles.badge, { backgroundColor: TYPE_COLORS[task.type] }]}>
+              <Text style={styles.badgeText}>{task.type}</Text>
             </View>
-
-            <View style={styles.deadline}>
-              <Ionicons name="time-outline" size={14} color={Colors.text.tertiary} />
-              <Text style={styles.deadlineText}>{task.deadline}</Text>
+            <View style={styles.deadlineRow}>
+              <Ionicons name="calendar-outline" size={14} color="#999" />
+              <Text style={styles.deadline}>{task.deadline}</Text>
             </View>
           </View>
         </View>
-
-        {/* Actions */}
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
-            <Ionicons name="trash-outline" size={18} color={Colors.danger} />
-          </TouchableOpacity>
-          <Ionicons name="chevron-forward" size={20} color={Colors.border} />
-        </View>
       </View>
+
+      <Ionicons name="chevron-forward" size={20} color="#CCC" />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.background.primary,
-    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
     padding: 16,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    marginBottom: 8,
+    borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowRadius: 3,
     elevation: 2,
   },
-  cardCompleted: {
-    opacity: 0.6,
-  },
-  content: {
+  left: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    flex: 1,
+    gap: 12,
   },
   checkbox: {
-    marginRight: 12,
-    marginTop: 2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#CCC',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: '#4CAF50',
+    borderColor: '#4CAF50',
   },
   info: {
     flex: 1,
@@ -107,43 +85,35 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.text.primary,
-    marginBottom: 8,
+    color: '#333',
+    marginBottom: 6,
   },
   titleCompleted: {
     textDecorationLine: 'line-through',
-    color: Colors.text.tertiary,
+    color: '#999',
   },
-  tags: {
+  meta: {
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
     gap: 12,
   },
-  tag: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
-  tagText: {
-    fontSize: 12,
+  badgeText: {
+    fontSize: 11,
     fontWeight: '600',
+    color: '#333',
   },
-  deadline: {
+  deadlineRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  deadlineText: {
+  deadline: {
     fontSize: 13,
-    color: Colors.text.tertiary,
-  },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  deleteButton: {
-    padding: 4,
+    color: '#999',
   },
 });
