@@ -1,89 +1,95 @@
-import { Task, DaySchedule } from '@/types';
+import { DaySchedule, Task } from '@/types';
+import { COLORS } from '@/utils/colors';
 
 export const INITIAL_TASKS: Task[] = [
   {
     id: '1',
-    title: 'Math Assignment',
+    title: 'App Dev',
     type: 'Homework',
-    deadline: 'Nov 5, 2025',
+    deadline: 'Nov 10, 2025',
     completed: false,
-    notes: 'Complete exercises 1-15 from Chapter 3. Focus on algebraic expressions and equations.',
-  },
-  {
-    id: '2',
-    title: 'Physics Midterm',
-    type: 'Exam',
-    deadline: 'Nov 8, 2025',
-    completed: false,
-    notes: "Study chapters 4-7. Review Newton's laws and energy conservation principles.",
-  },
-  {
-    id: '3',
-    title: 'History Essay',
-    type: 'Project',
-    deadline: 'Nov 12, 2025',
-    completed: false,
-    notes: 'Write 1500 words on World War II causes. Include at least 5 scholarly sources.',
-  },
-  {
-    id: '4',
-    title: 'Chemistry Lab Report',
-    type: 'Homework',
-    deadline: 'Nov 6, 2025',
-    completed: false,
-    notes: 'Document the acid-base titration experiment. Include data tables and analysis.',
-  },
-  {
-    id: '5',
-    title: 'English Reading',
-    type: 'Homework',
-    deadline: 'Nov 4, 2025',
-    completed: true,
-    notes: 'Read chapters 5-8 of "To Kill a Mockingbird" and prepare discussion notes.',
-  },
+    priority: 'high',
+    notes: 'React Native Mini Project',
+  }
 ];
 
 export const SCHEDULE_DATA: DaySchedule[] = [
   {
     day: 'Monday',
     slots: [
-      { time: '9:00 AM', subject: 'Mathematics', room: 'Room 201' },
-      { time: '11:00 AM', subject: 'Physics', room: 'Lab 3' },
-      { time: '2:00 PM', subject: 'English', room: 'Room 105' },
+      { id: '1', time: '9:00 AM', subject: 'App Dev', room: 'LR 5', color: COLORS.primary, day: 'Monday'},
+      { id: '2', time: '11:00 AM', subject: 'DSA', room: 'LR 1', color: COLORS.danger, day: 'Monday'},
+      { id: '3', time: '2:00 PM', subject: 'Networking 2', room: 'Room 105', color: COLORS.success, day: 'Monday'},
     ],
   },
   {
     day: 'Tuesday',
     slots: [
-      { time: '10:00 AM', subject: 'Chemistry', room: 'Lab 1' },
-      { time: '1:00 PM', subject: 'History', room: 'Room 302' },
+      { id: '4', time: '10:00 AM', subject: 'Contemporary World', room: 'CLA 5', color: COLORS.warning, day: 'Tuesday'},
+      { id: '5', time: '1:00 PM', subject: 'System Integration', room: 'LR 3', color: COLORS.project, day: 'Tuesday'},
     ],
   },
   {
     day: 'Wednesday',
     slots: [
-      { time: '9:00 AM', subject: 'Mathematics', room: 'Room 201' },
-      { time: '2:00 PM', subject: 'Physical Education', room: 'Gym' },
+      { id: '6', time: '9:00 AM', subject: 'App Dev', room: 'LAB 1', color: COLORS.primary, day: 'Wednesday'},
+      { id: '7', time: '2:00 PM', subject: 'Networking 2', room: 'LR 4', color: COLORS.success, day: 'Wednesday'},
     ],
   },
   {
     day: 'Thursday',
     slots: [
-      { time: '11:00 AM', subject: 'Physics', room: 'Lab 3' },
-      { time: '1:00 PM', subject: 'English', room: 'Room 105' },
+      { id: '8', time: '11:00 AM', subject: 'DSA', room: 'LR 2', color: COLORS.danger, day: 'Thursday'},
+      { id: '9', time: '1:00 PM', subject: 'Networking 2', room: 'LAB 1', color: COLORS.success, day: 'Thursday'},
     ],
   },
   {
     day: 'Friday',
     slots: [
-      { time: '10:00 AM', subject: 'Chemistry', room: 'Lab 1' },
-      { time: '12:00 PM', subject: 'History', room: 'Room 302' },
+      { id: '10', time: '10:00 AM', subject: 'Contemporary World', room: 'CLA 5', color: COLORS.warning, day: 'Friday'},
+      { id: '11', time: '12:00 PM', subject: 'System Integration', room: 'LR 3', color: COLORS.project, day: 'Friday'},
     ],
   },
 ];
 
 export const TYPE_COLORS = {
-  Exam: '#FF6B6B',
-  Project: '#4ECDC4',
-  Homework: '#FFE66D',
+  Exam: COLORS.exam,
+  Project: COLORS.project,
+  Homework: COLORS.homework,
 };
+
+export const TYPE_COLORS_LIGHT = {
+  Exam: COLORS.examLight,
+  Project: COLORS.projectLight,
+  Homework: COLORS.homeworkLight,
+};
+
+export const PRIORITY_COLORS = {
+  high: COLORS.danger,
+  medium: COLORS.warning,
+  low: COLORS.textLight,
+};
+
+
+export const SUBJECT_COLORS = {
+  'App Dev': COLORS.primary,
+  'DSA': COLORS.danger,
+  'Networking 2': COLORS.success,
+  'Contemporary World': COLORS.warning,
+  'System Integration': COLORS.project,
+  'Data Analytics': COLORS.secondary,
+  'EPIC Accelerate': COLORS.success,
+  'Computer Sciencee': COLORS.primaryDark,
+  'Introduction to Computing': COLORS.secondary,
+  'Com Prog': COLORS.warningLight,
+};
+
+export const DAYS_OF_WEEK: Array<{ label: string; value: string }> = [
+  { label: 'Monday', value: 'Monday' },
+  { label: 'Tuesday', value: 'Tuesday' },
+  { label: 'Wednesday', value: 'Wednesday' },
+  { label: 'Thursday', value: 'Thursday' },
+  { label: 'Friday', value: 'Friday' },
+  { label: 'Saturday', value: 'Saturday' },
+  { label: 'Sunday', value: 'Sunday' },
+];
