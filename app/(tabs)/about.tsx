@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 
 const members = [
-  'Alih, Salman L.',
-  'Calvi, Fairudz L.',
-  'Sampang, Ridzwan H.',
-  'Usman, Al-Asraff J.',
-  'Zambales, Maria Victoria Jean M.'
+  'Alih, Salman L., Business Analyst',
+  'Calvi, Fairudz L., Lead Developer',
+  'Sampang, Ridzwan H., Q&A/Test Engineer',
+  'Usman, Al-Asraff J., Project Manager',
+  'Zambales, Maria Victoria Jean M., UI Designer'
 ];
 
 export default function AboutScreen() {
