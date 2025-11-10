@@ -3,7 +3,7 @@ import { COLORS } from '@/utils/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { ScheduleContext } from '../_layout';
 
 export default function ScheduleScreen() {
@@ -17,42 +17,41 @@ export default function ScheduleScreen() {
   const totalClasses = schedule.reduce((sum, day) => sum + day.slots.length, 0);
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const todaySchedule = schedule.find(day => day.day === today);
+  const todayClassesCount = todaySchedule ? todaySchedule.slots.length : 0;
 
   return (
     <View style={styles.container}>
-      {/* Week Overview */}
+      {/* Overview Section */}
       <View style={styles.overviewContainer}>
         <View style={styles.overviewCard}>
-          <View style={styles.overviewIcon}>
-            <Ionicons name="calendar" size={24} color={COLORS.primary} />
+          <View style={[styles.overviewIcon, { backgroundColor: COLORS.primary + '20' }]}>
+            <Ionicons name="calendar" size={20} color={COLORS.primary} />
           </View>
-          <View>
+          <View style={styles.overviewTextContainer}>
             <Text style={styles.overviewNumber}>{schedule.length}</Text>
             <Text style={styles.overviewLabel}>School Days</Text>
           </View>
         </View>
 
         <View style={styles.overviewCard}>
-          <View style={styles.overviewIcon}>
-            <Ionicons name="book" size={24} color={COLORS.success} />
+          <View style={[styles.overviewIcon, { backgroundColor: COLORS.success + '20' }]}>
+            <Ionicons name="book" size={20} color={COLORS.success} />
           </View>
-          <View>
+          <View style={styles.overviewTextContainer}>
             <Text style={styles.overviewNumber}>{totalClasses}</Text>
             <Text style={styles.overviewLabel}>Total Classes</Text>
           </View>
         </View>
 
-        {todaySchedule && (
-          <View style={styles.overviewCard}>
-            <View style={styles.overviewIcon}>
-              <Ionicons name="today" size={24} color={COLORS.warning} />
-            </View>
-            <View>
-              <Text style={styles.overviewNumber}>{todaySchedule.slots.length}</Text>
-              <Text style={styles.overviewLabel}>Classes Today</Text>
-            </View>
+        <View style={styles.overviewCard}>
+          <View style={[styles.overviewIcon, { backgroundColor: COLORS.warning + '20' }]}>
+            <Ionicons name="today" size={20} color={COLORS.warning} />
           </View>
-        )}
+          <View style={styles.overviewTextContainer}>
+            <Text style={styles.overviewNumber}>{todayClassesCount}</Text>
+            <Text style={styles.overviewLabel}>Classes Today</Text>
+          </View>
+        </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -98,8 +97,6 @@ export default function ScheduleScreen() {
             ))}
           </>
         )}
-        
-      
       </ScrollView>
 
       {/* Floating Action Button */}
@@ -115,6 +112,9 @@ export default function ScheduleScreen() {
   );
 }
 
+const { width } = Dimensions.get('window');
+const isSmallScreen = width < 375;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -124,42 +124,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    gap: 12,
+    gap: 8,
     backgroundColor: COLORS.card,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
   overviewCard: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
     backgroundColor: COLORS.background,
-    padding: 12,
+    padding: isSmallScreen ? 8 : 12,
     borderRadius: 12,
+    minHeight: 80,
+    justifyContent: 'center',
   },
   overviewIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: COLORS.card,
+    width: isSmallScreen ? 36 : 44,
+    height: isSmallScreen ? 36 : 44,
+    borderRadius: isSmallScreen ? 18 : 22,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    marginBottom: 6,
+  },
+  overviewTextContainer: {
+    alignItems: 'center',
   },
   overviewNumber: {
-    fontSize: 18,
+    fontSize: isSmallScreen ? 16 : 18,
     fontWeight: 'bold',
     color: COLORS.text,
+    textAlign: 'center',
   },
   overviewLabel: {
-    fontSize: 11,
+    fontSize: isSmallScreen ? 10 : 11,
     color: COLORS.textSecondary,
     marginTop: 2,
+    textAlign: 'center',
   },
   content: {
     flex: 1,
@@ -236,17 +236,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#FFF',
-  },
-  footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 24,
-  },
-  footerText: {
-    fontSize: 13,
-    color: COLORS.textLight,
   },
   fab: {
     position: 'absolute',
